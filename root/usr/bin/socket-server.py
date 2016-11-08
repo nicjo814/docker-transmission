@@ -23,7 +23,7 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
             print "Proper command"
             if words[0].lower() == 'stop':
                 call(["s6-svc", "-d", "/var/run/s6/services/transmission"])
-                call(["killall", "-SIGTERM", "transmission-daemon"])
+                call(["killall", "-SIGKILL", "transmission-daemon"])
                 print "Stopped Transmission"
                 self.wfile.write("Stopped Transmission")
             else:
@@ -33,7 +33,7 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
                     print "Legal IP number"
                     if words[0].lower() == 'start':
                         call(["s6-svc", "-d", "/var/run/s6/services/transmission"])
-                        call(["killall", "-SIGTERM", "transmission-daemon"])
+                        call(["killall", "-SIGKILL", "transmission-daemon"])
                         call(['sed -i "s/\\"bind-address-ipv4\\": \(.*\)/\\"bind-address-ipv4\\": \\"'+newip+'\\",/g" /config/settings.json'], shell=True)
                         call(["s6-svc", "-u", "/var/run/s6/services/transmission"])
                         print "Updated Transmission"

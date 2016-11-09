@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import os
+import time
 import SocketServer
 import socket
 from subprocess import call
@@ -20,7 +22,6 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
         words = self.data.split()
         commands = set(["start", "stop"])
         if words[0].lower() in commands:
-            print "Proper command"
             if words[0].lower() == 'stop':
                 call(["s6-svc", "-d", "/var/run/s6/services/transmission"])
                 call(["killall", "-SIGKILL", "transmission-daemon"])
@@ -38,6 +39,13 @@ class MyTCPHandler(SocketServer.StreamRequestHandler):
                         call(["s6-svc", "-u", "/var/run/s6/services/transmission"])
                         print "Updated Transmission"
                         self.wfile.write("Updated Transmission")
+                        time.sleep(10)
+                        user = os.environ["RPCUSER"]
+                        passwd = os.environ["RPCPASSWD"]
+                        if (len(user) > 0) and (len(passwd) > 0):
+                            call(["transmission-remote", "--auth", user+":"+passwd, "--torrent", "all", "--start"])
+                        else:
+                            call(["transmission-remote", "--torrent", "all", "--start"])
                 except socket.error:
                     print "Not a legal IP number"
         else:

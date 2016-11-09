@@ -10,7 +10,7 @@ if [[ $AUTOBIND && $BINDIFACE ]]; then
         IP=`ip -f inet -o addr show ${BINDIFACE}|cut -d\  -f 7 | cut -d/ -f 1`
         if [[ $IP ]]; then
             #Parse the settings.json file to get the IP transmission is currently bound to.
-            OLD_IP=`grep bind-address-ipv4 settings.json`
+            OLD_IP=`grep bind-address-ipv4 /config/settings.json`
             if [[ $OLD_IP =~ (^.*bind-address-ipv4\": \")(.*)\".*$ ]]; then
                 OLD_IP=${BASH_REMATCH[2]}
                 #Compare IP and OLD_IP and change settings.json only if they differ

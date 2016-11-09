@@ -16,7 +16,8 @@ RUN \
 	jq \
 	transmission-cli \
 	transmission-daemon && \
- chmod +x /usr/bin/socket-server.py
+ chmod +x /usr/bin/socket-server.py && \
+ chmod +x /usr/bin/bind-iface.sh
 
 # ports and volumes
 EXPOSE 9091 51413

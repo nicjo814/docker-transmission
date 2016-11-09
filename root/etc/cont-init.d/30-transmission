@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv bash
+
+#Bind Transmission to interface specified by user
+if [[ $BINDIFACE ]]; then
+    IP=`ip -f inet -o addr show ${BINDIFACE}|cut -d\  -f 7 | cut -d/ -f 1`
+    sed -i "s/\"bind-address-ipv4\": \(.*\)/\"bind-address-ipv4\": \"${IP}\",/g" /config/settings.json
+fi
+
+#Check once every minute if IP of BINDIFACE has changed
+if [[ $BINDIFACE && $AUTOBIND ]]; then
+	watch -n60 /usr/bin/bind-iface.sh
+fi

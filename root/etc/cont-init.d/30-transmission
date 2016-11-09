@@ -8,5 +8,5 @@ fi
 
 #Check once every minute if IP of BINDIFACE has changed
 if [[ $BINDIFACE && $AUTOBIND ]]; then
-	watch -n60 /usr/bin/bind-iface.sh
+    watch -n60 /usr/bin/bind-iface.sh &>/dev/null &
 fi

@@ -21,6 +21,13 @@ if [[ $AUTOBIND && $BINDIFACE ]]; then
                     sed -i "s/\"bind-address-ipv4\": \(.*\)/\"bind-address-ipv4\": \"${IP}\",/g" /config/settings.json
                     s6-svc -u /var/run/s6/services/transmission
                     echo "Updated Transmission to listen on IP: $IP on interface: $BINDIFACE"
+                    #Now try to resume paused downloads with credentials
+                    sleep 10
+                    if [[ $RPCUSER && $RPCPASSWD ]]; then
+                        transmission-remote --auth $RPCUSER:$RPCPASSWD --torrent all --start
+                    else
+                        transmission-remote --torrent all --start
+                    fi
                 fi
             fi
         fi
